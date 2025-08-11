@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/controller/cart_controller.dart';
-import 'package:food_delivery_app/core/utils/asset_image.dart';
 import 'package:food_delivery_app/core/functions/app_size.dart';
 import 'package:food_delivery_app/core/widgets/custom_list_tile.dart';
 import 'package:lottie/lottie.dart';
@@ -45,6 +44,8 @@ class _CheckoutScreenBodyState extends State<CheckoutScreenBody> {
             itemBuilder: (context, index) {
               final cartItem = cartController.cartItems[index];
               return CustomlistTile(
+                index: index,
+                quantity: cartItem.quantity,
                 image: cartItem.image,
                 subtitlecheck: true,
                 title: cartItem.title,

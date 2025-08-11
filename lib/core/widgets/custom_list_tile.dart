@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/controller/cart_controller.dart';
 import 'package:food_delivery_app/core/functions/app_size.dart';
+import 'package:provider/provider.dart';
 
 int _count = 1;
 
@@ -10,6 +12,8 @@ class CustomlistTile extends StatefulWidget {
   final double width;
   final double radius;
   final double height;
+  final int index;
+  final int quantity;
 
   final bool subtitlecheck;
   final bool showActionButtons;
@@ -23,6 +27,8 @@ class CustomlistTile extends StatefulWidget {
     required this.radius,
     this.subtitlecheck = false,
     this.showActionButtons = true,
+    required this.index,
+    required this.quantity,
   });
 
   @override
@@ -32,6 +38,8 @@ class CustomlistTile extends StatefulWidget {
 class _CustomlistTileState extends State<CustomlistTile> {
   @override
   Widget build(BuildContext context) {
+    final cartController = Provider.of<CartController>(context, listen: false);
+
     return Container(
       padding: EdgeInsets.all(DeviceWidthHeight.perentageOfWidth(8)),
       height: DeviceWidthHeight.perentageOfHeight(widget.height),
@@ -73,22 +81,19 @@ class _CustomlistTileState extends State<CustomlistTile> {
               ],
             ),
           ),
-          if (widget.showActionButtons)
-            Row(
-              children: [
-                _actionButton(Icon(Icons.remove), () {
-                  setState(() {
-                    _count = _count - 1;
-                  });
-                }),
+          Row(
+            children: [
+              _actionButton(Icon(Icons.remove), () {
+                print("${widget.quantity}");
+                cartController.decreaseQuantity(widget.index);
+              }),
 
-                Text(" $_count "),
-                _actionButton(Icon(Icons.add), () {
-                  _count = _count + 1;
-                  setState(() {});
-                }),
-              ],
-            ),
+              Text("${cartController.cartItems[widget.index].id}"),
+              _actionButton(Icon(Icons.add), () {
+                cartController.increaseQuantity(widget.index);
+              }),
+            ],
+          ),
         ],
       ),
     );

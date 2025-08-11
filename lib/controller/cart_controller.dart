@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 class CartController extends ChangeNotifier {
   List<ProductsModel> cartItems = [];
 
-  /// Add item to cart (or increase quantity if already exists)
   void addItemToCart(ProductsModel item) {
     final index = cartItems.indexWhere((element) => element.id == item.id);
 
@@ -35,8 +34,8 @@ class CartController extends ChangeNotifier {
   }
 
   /// Increase quantity
-  void increaseQuantity(ProductsModel item) {
-    final index = cartItems.indexWhere((element) => element.id == item.id);
+  void increaseQuantity(int productId) {
+    final index = cartItems.indexWhere((element) => element.id == productId);
     if (index != -1) {
       cartItems[index].quantity++;
       notifyListeners();
@@ -44,8 +43,8 @@ class CartController extends ChangeNotifier {
   }
 
   /// Decrease quantity (remove if reaches zero)
-  void decreaseQuantity(ProductsModel item) {
-    final index = cartItems.indexWhere((element) => element.id == item.id);
+  void decreaseQuantity(int productId) {
+    final index = cartItems.indexWhere((element) => element.id == productId);
     if (index != -1) {
       if (cartItems[index].quantity > 1) {
         cartItems[index].quantity--;
@@ -60,7 +59,6 @@ class CartController extends ChangeNotifier {
   double get subtotal {
     double total = 0;
     for (var item in cartItems) {
-      // Assuming you have a `price` property in ProductsModel
       total += (item.quantity * (item.price));
     }
     return total;
