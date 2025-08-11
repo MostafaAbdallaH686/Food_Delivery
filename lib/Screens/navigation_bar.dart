@@ -13,6 +13,7 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   late int _currentIndex;
+  final List<String> _titles = ["FooDelivery", 'Cart', 'Profile'];
 
   final List<Widget> _screens = [
     HomeScreen(),
@@ -29,6 +30,29 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          _titles[_currentIndex],
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        leading:
+            (_currentIndex == 1 || _currentIndex == 2)
+                ? IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => setState(() => _currentIndex = 0),
+                )
+                : const SizedBox(width: kToolbarHeight),
+        actions:
+            (_currentIndex == 0)
+                ? [
+                  IconButton(
+                    onPressed: () => setState(() => _currentIndex = 1),
+                    icon: Icon(Icons.shopping_cart_outlined),
+                  ),
+                ]
+                : [],
+      ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

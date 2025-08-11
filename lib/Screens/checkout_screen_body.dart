@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/controller/cart_controller.dart';
 import 'package:food_delivery_app/core/utils/asset_image.dart';
 import 'package:food_delivery_app/core/functions/app_size.dart';
 import 'package:food_delivery_app/core/widgets/custom_list_tile.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class CheckoutScreenBody extends StatefulWidget {
   const CheckoutScreenBody({super.key});
@@ -15,38 +18,43 @@ class CheckoutScreenBody extends StatefulWidget {
 class _CheckoutScreenBodyState extends State<CheckoutScreenBody> {
   @override
   Widget build(BuildContext context) {
+    final cartController = Provider.of<CartController>(context, listen: false);
+    if (cartController.cartItems.isEmpty) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/lottie/empty.json', height: 200, width: 200),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'There is no Item in Cart, Please Discover and return here after add items',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      );
+    }
     return Column(
       children: [
         SizedBox(height: DeviceWidthHeight.perentageOfHeight(5)),
-        CustomlistTile(
-          image: Myimages.burger,
-          title: "Burger Palace",
-          subtitle: "2 items",
-          width: 70,
-          height: 100,
-          radius: 12,
-          showActionButtons: false,
-        ),
 
-        CustomlistTile(
-          image: Myimages.burger,
-          subtitlecheck: true,
-          title: "Classic Burger",
-          subtitle2: "Burger Palace",
-          subtitle: "Size :Large",
-          width: 90,
-          height: 120,
-          radius: 15,
-        ),
-        CustomlistTile(
-          image: Myimages.burger,
-          title: "Chicken Burger",
-          subtitlecheck: true,
-          subtitle2: "Burger Palace",
-          subtitle: "Size : Medium",
-          width: 90,
-          height: 120,
-          radius: 15,
+        SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.4,
+          child: ListView.builder(
+            itemCount: cartController.cartItems.length,
+            itemBuilder: (context, index) {
+              final cartItem = cartController.cartItems[index];
+              return CustomlistTile(
+                image: cartItem.image,
+                subtitlecheck: true,
+                title: cartItem.title,
+                subtitle: cartItem.desc,
+                width: 90,
+                height: 150,
+                radius: 15,
+              );
+            },
+          ),
         ),
 
         Padding(
@@ -58,7 +66,7 @@ class _CheckoutScreenBodyState extends State<CheckoutScreenBody> {
               _textpricess("Delivery fees", "\$5.00"),
               _textpricess("Taxes", "\$2.50"),
               _textpricess("Total", "\$32.5"),
-              SizedBox(height: DeviceWidthHeight.perentageOfHeight(22.9)),
+              SizedBox(height: DeviceWidthHeight.perentageOfHeight(10)),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

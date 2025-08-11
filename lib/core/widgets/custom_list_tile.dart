@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/core/utils/asset_image.dart';
 import 'package:food_delivery_app/core/functions/app_size.dart';
 
 int _count = 1;
@@ -8,7 +7,6 @@ class CustomlistTile extends StatefulWidget {
   final String image;
   final String title;
   final String subtitle;
-  final String? subtitle2;
   final double width;
   final double radius;
   final double height;
@@ -23,7 +21,6 @@ class CustomlistTile extends StatefulWidget {
     required this.width,
     required this.height,
     required this.radius,
-    this.subtitle2,
     this.subtitlecheck = false,
     this.showActionButtons = true,
   });
@@ -49,7 +46,7 @@ class _CustomlistTileState extends State<CustomlistTile> {
                 DeviceWidthHeight.perentageOfWidth(widget.radius),
               ),
               image: DecorationImage(
-                image: AssetImage(Myimages.burger),
+                image: AssetImage(widget.image),
                 fit: BoxFit.fill,
               ),
             ),
@@ -73,15 +70,6 @@ class _CustomlistTileState extends State<CustomlistTile> {
                     fontSize: 14,
                   ),
                 ),
-                if (widget.subtitlecheck && widget.subtitle2 != null)
-                  Text(
-                    widget.subtitle2!,
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.red[300],
-                      fontSize: 14,
-                    ),
-                  ),
               ],
             ),
           ),
