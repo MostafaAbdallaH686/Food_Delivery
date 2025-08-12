@@ -1,8 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/Screens/navigation_bar.dart';
+import 'package:food_delivery_app/core/functions/app_route.dart';
 import 'package:food_delivery_app/core/utils/asset_image.dart';
 import 'package:food_delivery_app/core/functions/app_size.dart';
+import 'package:lottie/lottie.dart';
 
 class ProfileScreenBody extends StatelessWidget {
   const ProfileScreenBody({super.key});
@@ -43,7 +46,27 @@ class ProfileScreenBody extends StatelessWidget {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red[50]),
             onPressed: () {
-              print(">>>>>>>i am out<<<<<<<<< ");
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) {
+                  return Center(
+                    child: Lottie.asset(
+                      "assets/lottie/UfXbWq05nz.json",
+                      width: DeviceWidthHeight.perentageOfWidth(300),
+                      height: DeviceWidthHeight.perentageOfHeight(500),
+                      repeat: false,
+                      onLoaded: (composition) {
+                        Future.delayed(composition.duration, () {
+                          AppRoute.navigateToAndDeleteAllPathRoute(
+                            MainNavigation(index: 0),
+                          );
+                        });
+                      },
+                    ),
+                  );
+                },
+              );
             },
             child: Text("Log out"),
           ),

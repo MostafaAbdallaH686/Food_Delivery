@@ -34,7 +34,7 @@ class ProductsModel {
   ];
 
   static String _getFoodTitle(int index) {
-    final foodNames = ['Burger', 'Nescalop', 'Sandwitch'];
+    final foodNames = ['Burger', 'Nescalop', 'Sandwich'];
     return '${foodNames[index % foodNames.length]} ${(index ~/ foodNames.length) + 1}';
   }
 
