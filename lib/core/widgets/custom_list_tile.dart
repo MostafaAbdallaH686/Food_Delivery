@@ -3,31 +3,21 @@ import 'package:food_delivery_app/controller/cart_controller.dart';
 import 'package:food_delivery_app/core/functions/app_size.dart';
 import 'package:provider/provider.dart';
 
-int _count = 1;
-
 class CustomlistTile extends StatefulWidget {
   final String image;
   final String title;
   final String subtitle;
-  final double width;
-  final double radius;
-  final double height;
-  final int index;
+  final int id;
   final int quantity;
-
-  final bool subtitlecheck;
   final bool showActionButtons;
   const CustomlistTile({
     super.key,
     required this.image,
     required this.title,
     required this.subtitle,
-    required this.width,
-    required this.height,
-    required this.radius,
-    this.subtitlecheck = false,
+
     this.showActionButtons = true,
-    required this.index,
+    required this.id,
     required this.quantity,
   });
 
@@ -42,16 +32,22 @@ class _CustomlistTileState extends State<CustomlistTile> {
 
     return Container(
       padding: EdgeInsets.all(DeviceWidthHeight.perentageOfWidth(8)),
-      height: DeviceWidthHeight.perentageOfHeight(widget.height),
+      height: DeviceWidthHeight.perentageOfHeight(
+        DeviceWidthHeight.perentageOfHeight(150),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: DeviceWidthHeight.perentageOfWidth(widget.width),
+            width: DeviceWidthHeight.perentageOfWidth(
+              DeviceWidthHeight.perentageOfWidth(100),
+            ),
             height: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(
-                DeviceWidthHeight.perentageOfWidth(widget.radius),
+                DeviceWidthHeight.perentageOfWidth(
+                  DeviceWidthHeight.perentageOfWidth(15),
+                ),
               ),
               image: DecorationImage(
                 image: AssetImage(widget.image),
@@ -84,13 +80,11 @@ class _CustomlistTileState extends State<CustomlistTile> {
           Row(
             children: [
               _actionButton(Icon(Icons.remove), () {
-                print("${widget.quantity}");
-                cartController.decreaseQuantity(widget.index);
+                cartController.decreaseQuantity(widget.id);
               }),
-
-              Text("${cartController.cartItems[widget.index].id}"),
+              Text("${widget.quantity}"),
               _actionButton(Icon(Icons.add), () {
-                cartController.increaseQuantity(widget.index);
+                cartController.increaseQuantity(widget.id);
               }),
             ],
           ),

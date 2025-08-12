@@ -13,7 +13,7 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   late int _currentIndex;
-  final List<String> _titles = ["FooDelivery", 'Cart', 'Profile'];
+  final List<String> _titles = ["FoodDelivery", 'Cart', 'Profile'];
 
   final List<Widget> _screens = [
     HomeScreen(),

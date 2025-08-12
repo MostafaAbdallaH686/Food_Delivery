@@ -6,7 +6,7 @@ import 'package:food_delivery_app/core/functions/app_size.dart';
 import 'package:food_delivery_app/core/models/products_model.dart';
 import 'package:provider/provider.dart';
 
-class CustomListView extends StatefulWidget {
+class CustomListView extends StatelessWidget {
   const CustomListView({
     super.key,
     required this.image,
@@ -15,7 +15,6 @@ class CustomListView extends StatefulWidget {
     required this.id,
     required this.price,
   });
-
   final int id;
   final String image;
   final String text1;
@@ -23,38 +22,10 @@ class CustomListView extends StatefulWidget {
   final double price;
 
   @override
-  State<CustomListView> createState() => _CustomListViewState();
-}
-
-class _CustomListViewState extends State<CustomListView> {
-  bool isAdded = false;
-
-  void _toggleCart() {
-    final product = ProductsModel(
-      id: widget.id,
-      title: widget.text1,
-      desc: widget.text2,
-      image: widget.image,
-      price: widget.price,
-      quantity: 1,
-      isAdded: isAdded,
-    );
-
-    final cart = Provider.of<CartController>(context, listen: false);
-
-    if (isAdded) {
-      cart.removeItemFromCart(product);
-    } else {
-      cart.addItemToCart(product);
-    }
-
-    setState(() {
-      isAdded = !isAdded;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartController>(context);
+    final isAdded = cart.isInCart(id);
+
     return Container(
       margin: EdgeInsets.symmetric(
         vertical: DeviceWidthHeight.perentageOfHeight(8),
@@ -85,7 +56,7 @@ class _CustomListViewState extends State<CustomListView> {
                 DeviceWidthHeight.perentageOfWidth(8),
               ),
               image: DecorationImage(
-                image: AssetImage(widget.image),
+                image: AssetImage(image),
                 fit: BoxFit.cover,
               ),
             ),
@@ -98,7 +69,7 @@ class _CustomListViewState extends State<CustomListView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.text1,
+                  text1,
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -107,7 +78,7 @@ class _CustomListViewState extends State<CustomListView> {
                 ),
                 SizedBox(height: DeviceWidthHeight.perentageOfHeight(2)),
                 Text(
-                  widget.text2,
+                  text2,
                   style: TextStyle(color: Colors.red.shade300, fontSize: 13),
                 ),
               ],
@@ -131,7 +102,23 @@ class _CustomListViewState extends State<CustomListView> {
                   horizontal: DeviceWidthHeight.perentageOfWidth(12),
                 ),
               ),
-              onPressed: _toggleCart,
+              onPressed: () {
+                final product = ProductsModel(
+                  isAdded: true,
+                  id: id,
+                  title: text1,
+                  desc: text2,
+                  image: image,
+                  price: price,
+                  quantity: 1,
+                );
+
+                if (isAdded) {
+                  cart.removeItemFromCart(product);
+                } else {
+                  cart.addItemToCart(product);
+                }
+              },
               child: Text(
                 textAlign: TextAlign.center,
                 isAdded ? "Remove from cart" : "Add to cart",

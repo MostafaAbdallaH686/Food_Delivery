@@ -10,20 +10,11 @@ import 'package:food_delivery_app/core/widgets/grid_view.dart';
 import 'package:food_delivery_app/core/widgets/list_view.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  bool isListSelected = true;
-  bool isAdded = false;
-  @override
   Widget build(BuildContext context) {
-    final cartController = Provider.of<CartController>(context, listen: false);
-
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -146,28 +137,32 @@ class _HomeScreenState extends State<HomeScreen> {
               "Featured Items",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            SizedBox(height: DeviceWidthHeight.perentageOfHeight(15)),
+            SizedBox(height: DeviceWidthHeight.perentageOfHeight(5)),
             // Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                CustomButton(
-                  text: "List View",
-                  isselected: isListSelected,
-                  onTap: () {
-                    setState(() {
-                      isListSelected = true;
-                    });
-                  },
-                ),
-                SizedBox(width: DeviceWidthHeight.perentageOfWidth(5)),
-                CustomButton(
-                  text: "Grid View",
-                  isselected: !isListSelected,
-                  onTap: () {
-                    setState(() {
-                      isListSelected = false;
-                    });
+                Consumer<CartController>(
+                  builder: (context, controller, _) {
+                    return Row(
+                      children: [
+                        CustomButton(
+                          text: "List View",
+                          isselected: controller.isListSelected,
+                          onTap: () {
+                            controller.setListSelected(true);
+                          },
+                        ),
+                        SizedBox(width: DeviceWidthHeight.perentageOfWidth(5)),
+                        CustomButton(
+                          text: "Grid View",
+                          isselected: !controller.isListSelected,
+                          onTap: () {
+                            controller.setListSelected(false);
+                          },
+                        ),
+                      ],
+                    );
                   },
                 ),
               ],
@@ -176,8 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // View Switcher
             Expanded(
-              child:
-                  isListSelected
+              child: Consumer<CartController>(
+                builder: (context, controller, _) {
+                  return controller.isListSelected
                       ? ListView.separated(
                         itemCount: ProductsModel.productsList.length,
                         separatorBuilder:
@@ -192,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             image: cartItem.image,
                             text1: cartItem.title,
                             text2: cartItem.desc,
-                            price: index * 12.2,
+                            price: cartItem.price,
                           );
                         },
                       )
@@ -209,12 +205,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           final cartItem = ProductsModel.productsList[index];
 
                           return CustomGridView(
+                            price: cartItem.price,
+                            id: cartItem.id,
                             image: cartItem.image,
                             text1: cartItem.title,
                             text2: cartItem.desc,
                           );
                         },
-                      ),
+                      );
+                },
+              ),
             ),
           ],
         ),

@@ -23,12 +23,12 @@ class ProductsModel {
   static final List<ProductsModel> productsList = [
     for (int i = 0; i < 100; i++)
       ProductsModel(
-        price: (i * 87) / 2,
+        price: ((i + 1) * 10) / 2,
         id: i,
         image: _getFoodImage(i),
         title: _getFoodTitle(i),
         desc: _getFoodDescription(i),
-        quantity: 1,
+        quantity: 0,
         isAdded: false,
       ),
   ];
